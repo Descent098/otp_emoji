@@ -12,6 +12,9 @@ chipher_chars : (list)
     - 🚫 DON'T USE THIS IN PRODUCTION 🚫 I created this project to help better
        understand my security course in 🏫.
 
+    - No I will not put this on PyPi, again I put minimal effort into this and it's
+       better for it to remain a dissapointment to me than the python community as a whole.
+
 👩‍🏫References
 -------------
 One Time Pad explanations:
