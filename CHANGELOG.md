@@ -1,19 +1,12 @@
 # Changelog
 
-Include information about your changes as you release 
+## V 1.0.0; February 15th
 
-## Version number; Date
-
-Description of release goals.
+Created initial API code.
 
 ### Features
 
-...
-
-### Bug fixes
-
-...
-
-### Documentation improvements
-
-...
+- Ability to generate emoji based one-time-pads
+- Encrypt text using emoji based one-time-pads
+- Decrypt text using emoji based one-time-pads
+- Supports 63 emoji characters

@@ -44,9 +44,3 @@ def test(session):
     session.install('.')
     session.install('pytest')
     session.run('pytest')
-
-@nox.session
-def docs(session):
-    # Serve documentation to verify it's how you want
-    session.install("mkdocs")
-    session.run("mkdocs", "serve")

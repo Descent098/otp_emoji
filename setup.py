@@ -19,19 +19,20 @@ def get_content(*filename):
 
 setuptools.setup(
     name = "otp",
-    version = "0.1.0", 
+    version = "1.0.0", 
     author = "Kieran Wood", 
     author_email = "kieran@canadiancoding.ca",
-    description = "", # TODO: Give the package a description
+    description = "Used to generate 🙊 one-time pads 🤐 exclusively in emojis.",
     long_description = get_content("README.md", "CHANGELOG.md"),
     long_description_content_type = "text/markdown",
-    url = "", # TODO: Put github link if applicable
+    url = "https://github.com/Descent098/otp",
     include_package_data = True,
-    py_modules=["otp"],
+    install_requires=["docopt"],
+    py_modules=["otp", "otp_emojis"],
     extras_require = {
         "dev" : ["nox",    # Used to run automated processes
                  "pytest", # Used to run the test code in the tests directory
-                 "mkdocs"],# Used to create HTML versions of the markdown docs in the docs directory
+                 "pdoc3"], # Used to generate documentation
 
     },
     classifiers = [
