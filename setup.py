@@ -32,7 +32,7 @@ setuptools.setup(
     extras_require = {
         "dev" : ["nox",    # Used to run automated processes
                  "pytest", # Used to run the test code in the tests directory
-                 "pdoc3"], # Used to generate documentation
+                 "pdoc3"], # Used to generate API documentation
 
     },
     classifiers = [

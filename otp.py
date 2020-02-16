@@ -58,6 +58,7 @@ decrypt(ciphertext, pad, text_path='./decrypted_text.txt')
 📋TODO
 ------
 - CLI
+- Write tests
 - More emojis
 """
 
