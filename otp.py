@@ -66,6 +66,8 @@ decrypt(ciphertext, pad, text_path='./decrypted_text.txt')
 """
 
 # Standard lib dependencies
+import os                       # Used to validate filepaths
+import sys                      # Used to fix arglengths of 0 for CLI
 import logging                  # Used to log (obviously)
 from random import choice       # Used to choose each emoji per character
 from typing import Generator    # Used to typehint generator returns
@@ -73,7 +75,27 @@ from typing import Generator    # Used to typehint generator returns
 # Internal Dependencies
 from otp_emojis import cipher_chars  # The list of useable emojis for otp generation
 
-usage = """ """
+# External Dependencies
+from docopt import docopt
+
+usage = """Used to generate one-time pads 🤐, by default in emojis.
+
+Usage:
+    otp [-h] [-v]
+    otp encrypt <text> [-s] [-o OUTPUT_PATH] [-p PAD_PATH] 
+    otp decrypt <ciphertext> <pad> [-s] [-o OUTPUT_PATH] 
+
+
+Options:
+-h, --help            show this help message and exit
+-v, --version         show program's version number and exit
+-o OUTPUT_PATH, --output OUTPUT_PATH
+                      a directory of where to write pad/plaintext/ciphertext
+                       output
+-p PAD_PATH, --pad PAD_PATH
+                      allows you to specify a pre-created one time pad
+-s, --stream          print result to output stream (stdout)
+ """
 
 def generate_otp(length:int) -> Generator:
     """Generates a one time pad of emojis based on input length.
@@ -238,7 +260,7 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -> str:
         plaintext += decrypted_value
 
     if text_path:
-        with open(text_path, "wb") as encrypted_message:
+        with open(os.path.abspath(text_path), "wb") as encrypted_message:
             encrypted_message.write(plaintext.encode("utf-8"))
         logging.info(f"Decrypted text written to: {text_path}")
 
@@ -246,3 +268,49 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -> str:
 
 def main():
     """TODO: Primary otp script entrypoint"""
+    if len(sys.argv) == 1: # If no arguments are provided
+        print(usage)       # Print helptext
+        exit()             # Exit program
+
+    args = docopt(usage, version="otp V 1.0.0")
+
+    print(args)
+
+    # ================== Encrypt Argument Parsing ==================
+    if args["encrypt"]:        
+        if os.path.isfile(args["<text>"]):
+            with open(args["<text>"], encoding="utf-8") as text_file:
+                args["<text>"] = text_file.read()
+        if args["--output"]:
+            if not os.path.isdir(args["--output"]): # If no valid output directory specified
+                args["--output"] = os.curdir
+        else:
+            args["--output"] = os.curdir
+
+        ciphertext, pad = encrypt(args["<text>"], args["--pad"], pad_path=f"{args['--output']}{os.sep}pad.txt", ciphertext_path=f"{args['--output']}{os.sep}ciphertext.txt")
+
+        if args["--stream"]:
+            print(f"Ciphertext: {ciphertext}")
+            print(f"Pad: {pad}")
+    
+    # ================== Decrypt Argument Parsing ==================
+    if args["decrypt"]:
+        if args["--output"]:
+            if not os.path.isdir(args["--output"]): # If no valid output directory specified
+                args["--output"] = os.curdir
+        else:
+            args["--output"] = False
+
+        with open(args["<ciphertext>"], encoding="utf-8") as ciphertext_file:
+            args["<ciphertext>"] = ciphertext_file.read()
+        
+        with open(args["<pad>"], encoding="utf-8") as pad_file:
+            args["<pad>"] = pad_file.read()
+        
+        plaintext = decrypt(args["<ciphertext>"], args["<pad>"], text_path=f"{args['--output']}{os.sep}plaintext.txt")
+
+        if args["--stream"]:
+            print(plaintext)
+
+if __name__ == "__main__":
+    main()
