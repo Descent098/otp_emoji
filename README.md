@@ -75,7 +75,6 @@ API & Script Documentation: [https://kieranwood.ca/otp](https://kieranwood.ca/ot
 There are a few dependencies you will need to use this package fully, they are specified in the extras require parameter in setup.py but you can install them manually:
 
 ```
-nox   	# Used to run automated processes
 pytest 	# Used to run the test code in the tests directory
 pdoc3   # Used to generate API documentation
 ```
@@ -125,10 +124,6 @@ To view the current documentation site you can run ```pdoc otp --http localhost:
 
 
 **CHANGELOG.md**: Used to create a changelog of features you add, bugs you fix etc. as you release.
-
-
-
-**noxfile.py**: Used to configure various automated processes using [nox](https://nox.readthedocs.io/en/stable/).
 
 
 
