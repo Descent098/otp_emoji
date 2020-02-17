@@ -35,15 +35,25 @@ output to the current directory as ```plaintext.txt```.
 📦Variables
 ------------
 chipher_chars : (list)
-    The list of emojis useable (comes from otp_emojis module)
+    The list of emojis useable for creating one time pads
+
+usage : (str)
+    The POSIX usage string that drives docopt for the ``otp`` script
 
 📝Notes
 --------
-    - 🚫 DON'T USE THIS IN PRODUCTION 🚫 I created this project to help better
-       understand my security course in 🏫.
+- 🚫 DON'T USE THIS IN PRODUCTION 🚫 I created this project to help better
+    understand my security course in 🏫.
 
-    - No I will not put this on PyPi, again I put minimal effort into this and it's
-       better for it to remain a dissapointment to me than the python community as a whole.
+- No I will not put this on PyPi, again I put minimal effort into this and it's
+    better for it to remain a dissapointment to me than the python community as a whole.
+
+- When opening a text file with the api make sure to pass the encoding parameter to open()
+    as 'UTF-8' otherwise there will be an error when the charmaps are read. i.e. 
+```
+with open('pad.txt', encoding='utf-8') as pad_file:
+    pad = pad_file.read()
+```
 
 👩‍🏫References
 -------------
@@ -58,6 +68,8 @@ One Time Pad explanations:
 Encrypting 'Do not go gentle into that good night' by Dylan Thomas
 
 ```
+from otp import encrypt, decrypt
+
 text = '''Do not go gentle into that good night,
 Old age should burn and rave at close of day;
 Rage, rage against the dying of the light.
@@ -87,11 +99,6 @@ ciphertext, pad = encrypt(text, pad_path='./pad.txt', ciphertext_path='./ciphert
 
 decrypt(ciphertext, pad, text_path='./decrypted_text.txt')
 ```
-
-📋TODO
-------
-- Write tests
-- More emojis
 """
 
 # Standard lib dependencies
@@ -100,9 +107,6 @@ import sys                      # Used to fix arglengths of 0 for CLI
 import logging                  # Used to log (obviously)
 from random import choice       # Used to choose each emoji per character
 from typing import Generator    # Used to typehint generator returns
-
-# Internal Dependencies
-from otp_emojis import cipher_chars  # The list of useable emojis for otp generation
 
 # External Dependencies
 from docopt import docopt   # Used to handle argument parsing from the entrypoint
@@ -124,7 +128,14 @@ Options:
 -p PAD_PATH, --pad PAD_PATH
                       allows you to specify a pre-created one time pad
 -s, --stream          print result to output stream (stdout)
- """
+"""
+
+cipher_chars = [
+    "🤗", "🙄", "🤮", "🤧", "🥵", "🙏", "👅", "🍒", "🍆", "🍇", "🍌", "🍋", "🌵", "🍑", "👀",
+    "👨‍💻", "👨‍🎤", "🧛", "🧜‍♀️", "🧝‍♂️", "🧞", "👨‍🦼", "🧗", "⛷", "🐶", "🦊", "🦄", "🐊", "🐢", "🦜", "🦉",
+    "🐙", "🐳", "🐉", "🦖", "🦂", "🥐", "🥨", "🥯", "🥞", "🍔", "🍕", "🧈", "🍜", "🦀", "🦞", "🦑",
+    "🏺", "🚄", "🚔", "🦼", "🚀", "🛸", "🌚", "❄", "🌊", "🥌", "♟", "🦺", "🎩", "🎷", "💻", "💾"
+]
 
 def generate_otp(length:int) -> Generator:
     """Generates a one time pad of emojis based on input length.
