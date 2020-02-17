@@ -21,13 +21,41 @@
 </header>
 <section id="section-intro">
 <p>Used to generate 🙊 one-time pads 🤐 exclusively in emojis.</p>
-<p>Also has functions for 🔒'ing and 🔓'ing text with the one time pads.</p>
+<p>Also has functions for 🔒'ing and 🔓'ing text with the one time pads. The
+module exposes both an API and entrypoint. API documentation begins after the
+entrypoint usage information.</p>
+<h2 id="script-usage">🖥️Script Usage</h2>
+<p>The usage POSIX string for the otp script:</p>
+<pre><code>
+Usage
+-----
+otp [-h] [-v]
+otp encrypt &lt;text&gt; [-s] [-o OUTPUT_PATH] [-p PAD_PATH]
+otp decrypt &lt;ciphertext&gt; &lt;pad&gt; [-s] [-o OUTPUT_PATH]
+Options:
+-h, --help            show this help message and exit
+-v, --version         show program's version number and exit
+-o OUTPUT_PATH, --output OUTPUT_PATH
+                      custom directory of where to write 
+                      pad/plaintext/ciphertext output
+-p PAD_PATH, --pad PAD_PATH
+                      allows you to specify a pre-created one time pad
+-s, --stream          print result to output stream (stdout)
+</code></pre>
+<p>So for example you could run <code>otp encrypt secret_text.txt</code> which will create
+a ciphertext and pad of the contents of secret_text.txt and output them to the current
+directory as <code>pad.txt</code> and <code>ciphertext.txt</code> respectively. You could then run
+<code>otp decrypt ciphertext.txt pad.txt</code> which would decrypt the message and send the
+output to the current directory as <code>plaintext.txt</code>.</p>
 <h2 id="variables">📦Variables</h2>
 <p>chipher_chars : (list)
 The list of emojis useable (comes from otp_emojis module)</p>
 <h2 id="notes">📝Notes</h2>
 <pre><code>- 🚫 DON'T USE THIS IN PRODUCTION 🚫 I created this project to help better
    understand my security course in 🏫.
+
+- No I will not put this on PyPi, again I put minimal effort into this and it's
+   better for it to remain a dissapointment to me than the python community as a whole.
 </code></pre>
 <h2 id="references">👩‍🏫References</h2>
 <p>One Time Pad explanations:
@@ -68,7 +96,6 @@ decrypt(ciphertext, pad, text_path='./decrypted_text.txt')
 </code></pre>
 <h2 id="todo">📋TODO</h2>
 <ul>
-<li>CLI</li>
 <li>Write tests</li>
 <li>More emojis</li>
 </ul>
@@ -78,7 +105,37 @@ decrypt(ciphertext, pad, text_path='./decrypted_text.txt')
 </summary>
 <pre><code class="python">&#34;&#34;&#34;Used to generate 🙊 one-time pads 🤐 exclusively in emojis.
 
-Also has functions for 🔒&#39;ing and 🔓&#39;ing text with the one time pads.
+Also has functions for 🔒&#39;ing and 🔓&#39;ing text with the one time pads. The
+module exposes both an API and entrypoint. API documentation begins after the
+entrypoint usage information.
+
+
+🖥️Script Usage
+--------------
+The usage POSIX string for the otp script:
+```
+Usage:
+    otp [-h] [-v]
+    otp encrypt &lt;text&gt; [-s] [-o OUTPUT_PATH] [-p PAD_PATH]
+    otp decrypt &lt;ciphertext&gt; &lt;pad&gt; [-s] [-o OUTPUT_PATH]
+
+
+Options:
+-h, --help            show this help message and exit
+-v, --version         show program&#39;s version number and exit
+-o OUTPUT_PATH, --output OUTPUT_PATH
+                      custom directory of where to write 
+                      pad/plaintext/ciphertext output
+-p PAD_PATH, --pad PAD_PATH
+                      allows you to specify a pre-created one time pad
+-s, --stream          print result to output stream (stdout)
+```
+
+So for example you could run ```otp encrypt secret_text.txt``` which will create
+a ciphertext and pad of the contents of secret_text.txt and output them to the current
+directory as ```pad.txt``` and ```ciphertext.txt``` respectively. You could then run
+```otp decrypt ciphertext.txt pad.txt``` which would decrypt the message and send the
+output to the current directory as ```plaintext.txt```.
 
 📦Variables
 ------------
@@ -89,6 +146,9 @@ chipher_chars : (list)
 --------
     - 🚫 DON&#39;T USE THIS IN PRODUCTION 🚫 I created this project to help better
        understand my security course in 🏫.
+
+    - No I will not put this on PyPi, again I put minimal effort into this and it&#39;s
+       better for it to remain a dissapointment to me than the python community as a whole.
 
 👩‍🏫References
 -------------
@@ -135,12 +195,13 @@ decrypt(ciphertext, pad, text_path=&#39;./decrypted_text.txt&#39;)
 
 📋TODO
 ------
-- CLI
 - Write tests
 - More emojis
 &#34;&#34;&#34;
 
 # Standard lib dependencies
+import os                       # Used to validate filepaths
+import sys                      # Used to fix arglengths of 0 for CLI
 import logging                  # Used to log (obviously)
 from random import choice       # Used to choose each emoji per character
 from typing import Generator    # Used to typehint generator returns
@@ -148,7 +209,27 @@ from typing import Generator    # Used to typehint generator returns
 # Internal Dependencies
 from otp_emojis import cipher_chars  # The list of useable emojis for otp generation
 
-usage = &#34;&#34;&#34; &#34;&#34;&#34;
+# External Dependencies
+from docopt import docopt   # Used to handle argument parsing from the entrypoint
+
+usage = &#34;&#34;&#34;Used to generate one-time pads 🤐, by default in emojis.
+
+Usage:
+    otp [-h] [-v]
+    otp encrypt &lt;text&gt; [-s] [-o OUTPUT_PATH] [-p PAD_PATH] 
+    otp decrypt &lt;ciphertext&gt; &lt;pad&gt; [-s] [-o OUTPUT_PATH] 
+
+
+Options:
+-h, --help            show this help message and exit
+-v, --version         show program&#39;s version number and exit
+-o OUTPUT_PATH, --output OUTPUT_PATH
+                      a directory of where to write pad/plaintext/ciphertext
+                       output
+-p PAD_PATH, --pad PAD_PATH
+                      allows you to specify a pre-created one time pad
+-s, --stream          print result to output stream (stdout)
+ &#34;&#34;&#34;
 
 def generate_otp(length:int) -&gt; Generator:
     &#34;&#34;&#34;Generates a one time pad of emojis based on input length.
@@ -313,14 +394,60 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -&gt; str:
         plaintext += decrypted_value
 
     if text_path:
-        with open(text_path, &#34;wb&#34;) as encrypted_message:
+        with open(os.path.abspath(text_path), &#34;wb&#34;) as encrypted_message:
             encrypted_message.write(plaintext.encode(&#34;utf-8&#34;))
         logging.info(f&#34;Decrypted text written to: {text_path}&#34;)
 
     return plaintext
 
-def main():
-    &#34;&#34;&#34;TODO: Primary otp script entrypoint&#34;&#34;&#34;</code></pre>
+def main() -&gt; None:
+    &#34;&#34;&#34;otp script entrypoint; handles logic for the otp command&#34;&#34;&#34;
+    if len(sys.argv) == 1: # If no arguments are provided
+        print(usage)       # Print helptext
+        exit()             # Exit program
+
+    args = docopt(usage, version=&#34;otp V 1.0.0&#34;)
+
+    print(args)
+
+    # ================== Encrypt Argument Parsing ==================
+    if args[&#34;encrypt&#34;]:        
+        if os.path.isfile(args[&#34;&lt;text&gt;&#34;]):
+            with open(args[&#34;&lt;text&gt;&#34;], encoding=&#34;utf-8&#34;) as text_file:
+                args[&#34;&lt;text&gt;&#34;] = text_file.read()
+        if args[&#34;--output&#34;]:
+            if not os.path.isdir(args[&#34;--output&#34;]): # If no valid output directory specified
+                args[&#34;--output&#34;] = os.curdir
+        else:
+            args[&#34;--output&#34;] = os.curdir
+
+        ciphertext, pad = encrypt(args[&#34;&lt;text&gt;&#34;], args[&#34;--pad&#34;], pad_path=f&#34;{args[&#39;--output&#39;]}{os.sep}pad.txt&#34;, ciphertext_path=f&#34;{args[&#39;--output&#39;]}{os.sep}ciphertext.txt&#34;)
+
+        if args[&#34;--stream&#34;]:
+            print(f&#34;Ciphertext: {ciphertext}&#34;)
+            print(f&#34;Pad: {pad}&#34;)
+    
+    # ================== Decrypt Argument Parsing ==================
+    if args[&#34;decrypt&#34;]:
+        if args[&#34;--output&#34;]:
+            if not os.path.isdir(args[&#34;--output&#34;]): # If no valid output directory specified
+                args[&#34;--output&#34;] = os.curdir
+        else:
+            args[&#34;--output&#34;] = False
+
+        with open(args[&#34;&lt;ciphertext&gt;&#34;], encoding=&#34;utf-8&#34;) as ciphertext_file:
+            args[&#34;&lt;ciphertext&gt;&#34;] = ciphertext_file.read()
+        
+        with open(args[&#34;&lt;pad&gt;&#34;], encoding=&#34;utf-8&#34;) as pad_file:
+            args[&#34;&lt;pad&gt;&#34;] = pad_file.read()
+        
+        plaintext = decrypt(args[&#34;&lt;ciphertext&gt;&#34;], args[&#34;&lt;pad&gt;&#34;], text_path=f&#34;{args[&#39;--output&#39;]}{os.sep}plaintext.txt&#34;)
+
+        if args[&#34;--stream&#34;]:
+            print(plaintext)
+
+if __name__ == &#34;__main__&#34;:
+    main() # Runs the otp command</code></pre>
 </details>
 </section>
 <section>
@@ -426,7 +553,7 @@ print( decrypt(ciphertext, pad) ) # Prints: 'Who controls the past controls the 
         plaintext += decrypted_value
 
     if text_path:
-        with open(text_path, &#34;wb&#34;) as encrypted_message:
+        with open(os.path.abspath(text_path), &#34;wb&#34;) as encrypted_message:
             encrypted_message.write(plaintext.encode(&#34;utf-8&#34;))
         logging.info(f&#34;Decrypted text written to: {text_path}&#34;)
 
@@ -605,13 +732,56 @@ for character in otp:   # Iterate through resulting generator
 <span>def <span class="ident">main</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>TODO: Primary otp script entrypoint</p></section>
+<section class="desc"><p>otp script entrypoint; handles logic for the otp command</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def main():
-    &#34;&#34;&#34;TODO: Primary otp script entrypoint&#34;&#34;&#34;</code></pre>
+<pre><code class="python">def main() -&gt; None:
+    &#34;&#34;&#34;otp script entrypoint; handles logic for the otp command&#34;&#34;&#34;
+    if len(sys.argv) == 1: # If no arguments are provided
+        print(usage)       # Print helptext
+        exit()             # Exit program
+
+    args = docopt(usage, version=&#34;otp V 1.0.0&#34;)
+
+    print(args)
+
+    # ================== Encrypt Argument Parsing ==================
+    if args[&#34;encrypt&#34;]:        
+        if os.path.isfile(args[&#34;&lt;text&gt;&#34;]):
+            with open(args[&#34;&lt;text&gt;&#34;], encoding=&#34;utf-8&#34;) as text_file:
+                args[&#34;&lt;text&gt;&#34;] = text_file.read()
+        if args[&#34;--output&#34;]:
+            if not os.path.isdir(args[&#34;--output&#34;]): # If no valid output directory specified
+                args[&#34;--output&#34;] = os.curdir
+        else:
+            args[&#34;--output&#34;] = os.curdir
+
+        ciphertext, pad = encrypt(args[&#34;&lt;text&gt;&#34;], args[&#34;--pad&#34;], pad_path=f&#34;{args[&#39;--output&#39;]}{os.sep}pad.txt&#34;, ciphertext_path=f&#34;{args[&#39;--output&#39;]}{os.sep}ciphertext.txt&#34;)
+
+        if args[&#34;--stream&#34;]:
+            print(f&#34;Ciphertext: {ciphertext}&#34;)
+            print(f&#34;Pad: {pad}&#34;)
+    
+    # ================== Decrypt Argument Parsing ==================
+    if args[&#34;decrypt&#34;]:
+        if args[&#34;--output&#34;]:
+            if not os.path.isdir(args[&#34;--output&#34;]): # If no valid output directory specified
+                args[&#34;--output&#34;] = os.curdir
+        else:
+            args[&#34;--output&#34;] = False
+
+        with open(args[&#34;&lt;ciphertext&gt;&#34;], encoding=&#34;utf-8&#34;) as ciphertext_file:
+            args[&#34;&lt;ciphertext&gt;&#34;] = ciphertext_file.read()
+        
+        with open(args[&#34;&lt;pad&gt;&#34;], encoding=&#34;utf-8&#34;) as pad_file:
+            args[&#34;&lt;pad&gt;&#34;] = pad_file.read()
+        
+        plaintext = decrypt(args[&#34;&lt;ciphertext&gt;&#34;], args[&#34;&lt;pad&gt;&#34;], text_path=f&#34;{args[&#39;--output&#39;]}{os.sep}plaintext.txt&#34;)
+
+        if args[&#34;--stream&#34;]:
+            print(plaintext)</code></pre>
 </details>
 </dd>
 </dl>
@@ -623,6 +793,7 @@ for character in otp:   # Iterate through resulting generator
 <h1>Index</h1>
 <div class="toc">
 <ul>
+<li><a href="#script-usage">🖥️Script Usage</a></li>
 <li><a href="#variables">📦Variables</a></li>
 <li><a href="#notes">📝Notes</a></li>
 <li><a href="#references">👩‍🏫References</a></li>
