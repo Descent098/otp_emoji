@@ -318,8 +318,6 @@ def main() -> None:
 
     args = docopt(usage, version="otp V 1.2.0")
 
-    print(args)
-
     # ================== Encrypt Argument Parsing ==================
     if args["encrypt"]:        
         if os.path.isfile(args["<text>"]):
