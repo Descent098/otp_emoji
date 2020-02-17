@@ -19,7 +19,7 @@ def get_content(*filename):
 
 setuptools.setup(
     name = "otp",
-    version = "1.0.1", 
+    version = "1.1.0", 
     author = "Kieran Wood", 
     author_email = "kieran@canadiancoding.ca",
     description = "Used to generate 🙊 one-time pads 🤐 exclusively in emojis.",
