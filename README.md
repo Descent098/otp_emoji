@@ -101,15 +101,9 @@ To view the current documentation site you can run ```pdoc otp --http localhost:
 
 
 
-#### otp_emojis.py
-
-*Contains the list of emojis*
-
-
-
 #### /tests
 
-*Contains tests for the API* 
+*Contains tests for the API (install pytest to run them)* 
 
 
 
