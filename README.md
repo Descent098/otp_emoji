@@ -62,7 +62,7 @@ decrypt(ciphertext, pad)
 
 ## Additional Documentation
 
-API Documentation: [https://kieranwood.ca/otp](https://kieranwood.ca/otp)
+API & Script Documentation: [https://kieranwood.ca/otp](https://kieranwood.ca/otp)
 
 
 

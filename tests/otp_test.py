@@ -1,4 +1,11 @@
-"""Include your own tests as functions here"""
+"""Tests functionality of the otp module. 
+
+🖥️Usage
+-------
+1. Install the otp module
+1. Install pytest (```pip install pytest```) and in the root directory run ```pytest```.
+
+"""
 
 from otp import *
 
