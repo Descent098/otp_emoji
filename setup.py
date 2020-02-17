@@ -19,7 +19,7 @@ def get_content(*filename):
 
 setuptools.setup(
     name = "otp",
-    version = "1.0.0", 
+    version = "1.0.1", 
     author = "Kieran Wood", 
     author_email = "kieran@canadiancoding.ca",
     description = "Used to generate 🙊 one-time pads 🤐 exclusively in emojis.",
@@ -29,6 +29,9 @@ setuptools.setup(
     include_package_data = True,
     install_requires=["docopt"],
     py_modules=["otp", "otp_emojis"],
+    entry_points = { 
+           'console_scripts': ['otp = otp:main']
+       },
     extras_require = {
         "dev" : ["nox",    # Used to run automated processes
                  "pytest", # Used to run the test code in the tests directory

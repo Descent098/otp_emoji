@@ -1,6 +1,36 @@
 """Used to generate 🙊 one-time pads 🤐 exclusively in emojis.
 
-Also has functions for 🔒'ing and 🔓'ing text with the one time pads.
+Also has functions for 🔒'ing and 🔓'ing text with the one time pads. The
+module exposes both an API and entrypoint. API documentation begins after the
+entrypoint usage information.
+
+
+🖥️Script Usage
+--------------
+The usage POSIX string for the otp script:
+```
+Usage:
+    otp [-h] [-v]
+    otp encrypt <text> [-s] [-o OUTPUT_PATH] [-p PAD_PATH]
+    otp decrypt <ciphertext> <pad> [-s] [-o OUTPUT_PATH]
+
+
+Options:
+-h, --help            show this help message and exit
+-v, --version         show program's version number and exit
+-o OUTPUT_PATH, --output OUTPUT_PATH
+                      custom directory of where to write 
+                      pad/plaintext/ciphertext output
+-p PAD_PATH, --pad PAD_PATH
+                      allows you to specify a pre-created one time pad
+-s, --stream          print result to output stream (stdout)
+```
+
+So for example you could run ```otp encrypt secret_text.txt``` which will create
+a ciphertext and pad of the contents of secret_text.txt and output them to the current
+directory as ```pad.txt``` and ```ciphertext.txt``` respectively. You could then run
+```otp decrypt ciphertext.txt pad.txt``` which would decrypt the message and send the
+output to the current directory as ```plaintext.txt```.
 
 📦Variables
 ------------
@@ -60,7 +90,6 @@ decrypt(ciphertext, pad, text_path='./decrypted_text.txt')
 
 📋TODO
 ------
-- CLI
 - Write tests
 - More emojis
 """
@@ -76,7 +105,7 @@ from typing import Generator    # Used to typehint generator returns
 from otp_emojis import cipher_chars  # The list of useable emojis for otp generation
 
 # External Dependencies
-from docopt import docopt
+from docopt import docopt   # Used to handle argument parsing from the entrypoint
 
 usage = """Used to generate one-time pads 🤐, by default in emojis.
 
@@ -266,8 +295,8 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -> str:
 
     return plaintext
 
-def main():
-    """TODO: Primary otp script entrypoint"""
+def main() -> None:
+    """otp script entrypoint; handles logic for the otp command"""
     if len(sys.argv) == 1: # If no arguments are provided
         print(usage)       # Print helptext
         exit()             # Exit program
@@ -313,4 +342,4 @@ def main():
             print(plaintext)
 
 if __name__ == "__main__":
-    main()
+    main() # Runs the otp command
