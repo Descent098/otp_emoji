@@ -1,5 +1,19 @@
 # Changelog
 
+## V 1.3.0; TBD
+
+Fixed otp generation so it isn't completely insecure.
+
+## Features
+
+- Switched to secrets module instead of random
+- Created a mapping of 255 emojis
+- Now ONLY ASCII characters are supported
+
+### Documentation changes
+
+- Updated to latest user & API  documentation version
+
 ## V 1.2.0; February 17th
 
 Added testing and additional emoji's.

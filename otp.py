@@ -369,7 +369,7 @@ def main() -> None:
         print(usage)       # Print helptext
         exit()             # Exit program
 
-    args = docopt(usage, version="otp V 1.2.0")
+    args = docopt(usage, version="otp V 1.3.0")
 
     # ================== Encrypt Argument Parsing ==================
     if args["encrypt"]:        
