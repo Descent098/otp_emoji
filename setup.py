@@ -18,23 +18,23 @@ def get_content(*filename):
     return content
 
 setuptools.setup(
-    name = "otp",
-    version = "1.2.0", 
+    name = "otp_emoji",
+    version = "1.3.0", 
     author = "Kieran Wood", 
     author_email = "kieran@canadiancoding.ca",
     description = "Used to generate 🙊 one-time pads 🤐 exclusively in emojis.",
     long_description = get_content("README.md", "CHANGELOG.md"),
     long_description_content_type = "text/markdown",
-    url = "https://github.com/Descent098/otp",
+    url = "https://github.com/Descent098/otp_emoji",
     include_package_data = True,
     install_requires=["docopt"],
-    py_modules=["otp"],
+    py_modules=["otp_emoji"],
     entry_points = { 
-           'console_scripts': ['otp = otp:main']
-       },
+            'console_scripts': ['otp_emoji = otp_emoji:main']
+        },
     extras_require = {
-        "dev" : ["pytest", # Used to run the test code in the tests directory
-                 "pdoc3"], # Used to generate API documentation
+        "dev" : [   "pytest", # Used to run the test code in the tests directory
+                    "pdoc3"], # Used to generate API documentation
 
     },
     classifiers = [
