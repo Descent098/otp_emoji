@@ -2,12 +2,12 @@
 
 🖥️Usage
 -------
-1. Install the otp module
+1. Install the otp_emoji module
 1. Install pytest (```pip install pytest```) and in the root directory run ```pytest```.
 
 """
 
-from otp import *
+from otp_emoji import *
 
 def test_generate_otp():
     """Testing the otp.generate_otp method"""

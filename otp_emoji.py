@@ -7,12 +7,12 @@ entrypoint usage information.
 
 🖥️Script Usage
 --------------
-The usage POSIX string for the otp script:
+The usage POSIX string for the otp_emoji script:
 ```
 Usage:
-    otp [-h] [-v]
-    otp encrypt <text> [-s] [-o OUTPUT_PATH] [-p PAD_PATH]
-    otp decrypt <ciphertext> <pad> [-s] [-o OUTPUT_PATH]
+    otp_emoji [-h] [-v]
+    otp_emoji encrypt <text> [-s] [-o OUTPUT_PATH] [-p PAD_PATH]
+    otp_emoji decrypt <ciphertext> <pad> [-s] [-o OUTPUT_PATH]
 
 
 Options:
@@ -26,10 +26,10 @@ Options:
 -s, --stream          print result to output stream (stdout)
 ```
 
-So for example you could run ```otp encrypt secret_text.txt``` which will create
+So for example you could run ```otp_emoji encrypt secret_text.txt``` which will create
 a ciphertext and pad of the contents of secret_text.txt and output them to the current
 directory as ```pad.txt``` and ```ciphertext.txt``` respectively. You could then run
-```otp decrypt ciphertext.txt pad.txt``` which would decrypt the message and send the
+```otp_emoji decrypt ciphertext.txt pad.txt``` which would decrypt the message and send the
 output to the current directory as ```plaintext.txt```.
 
 📦Variables
@@ -38,7 +38,7 @@ chipher_chars : (list)
     The list of emojis useable for creating one time pads
 
 usage : (str)
-    The POSIX usage string that drives docopt for the ``otp`` script
+    The POSIX usage string that drives docopt for the ``otp_emoji`` script
 
 📝Notes
 --------
@@ -78,7 +78,7 @@ ASCII chart for supported characters:
 Encrypting 'Do not go gentle into that good night' by Dylan Thomas
 
 ```
-from otp import encrypt, decrypt
+from otp_emoji import encrypt, decrypt
 
 text = '''Do not go gentle into that good night,
 Old age should burn and rave at close of day;
@@ -132,9 +132,9 @@ from docopt import docopt   # Used to handle argument parsing from the entrypoin
 usage = """Used to generate one-time pads 🤐, by default in emojis.
 
 Usage:
-    otp [-h] [-v]
-    otp encrypt <text> [-s] [-o OUTPUT_PATH] [-p PAD_PATH] 
-    otp decrypt <ciphertext> <pad> [-s] [-o OUTPUT_PATH] 
+    otp_emoji [-h] [-v]
+    otp_emoji encrypt <text> [-s] [-o OUTPUT_PATH] [-p PAD_PATH] 
+    otp_emoji decrypt <ciphertext> <pad> [-s] [-o OUTPUT_PATH] 
 
 
 Options:
@@ -214,7 +214,7 @@ def generate_otp(length:int) -> Generator:
     --------
     Generating a 10 character otp
     ```
-    from otp import generate_otp
+    from otp_emoji import generate_otp
 
     otp = generate_otp(10)
 
@@ -256,7 +256,7 @@ def encrypt(input_text:str, pad:bool=False, pad_path:str = False, ciphertext_pat
     Encrypting a 1984 (George Orwell) quote and saving
     the resulting ciphertext and path to files.
     ```
-    from otp import encrypt
+    from otp_emoji import encrypt
 
     text = 'Who controls the past controls the future. Who controls the present controls the past.'
 
@@ -336,7 +336,7 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -> str:
     --------
     Encrypting some text from files found in the encrypt() example.
     ```
-    from otp import decrypt
+    from otp_emoji import decrypt
 
     pad = ''
 
@@ -378,12 +378,12 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -> str:
     return plaintext
 
 def main() -> None:
-    """otp script entrypoint; handles logic for the otp command"""
+    """otp_emoji script entrypoint; handles logic for the otp_emoji command"""
     if len(sys.argv) == 1: # If no arguments are provided
         print(usage)       # Print helptext
         exit()             # Exit program
 
-    args = docopt(usage, version="otp V 1.3.0")
+    args = docopt(usage, version="otp_emoji V 1.3.0")
 
     # ================== Encrypt Argument Parsing ==================
     if args["encrypt"]:        
@@ -431,4 +431,4 @@ def main() -> None:
 
 if __name__ == "__main__":
 
-    main() # Runs the otp command
+    main() # Runs the otp_emoji command
