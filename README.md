@@ -1,4 +1,4 @@
-# One Time Pad
+# One Time Pad Emoji
 
 Used to generate 🙊 one-time pads 🤐 exclusively in emojis.
 
@@ -16,7 +16,7 @@ Also has functions for 🔒'ing and 🔓'ing text with the one time pads.
 
 #### From source
 
-1. Clone this repo: ```git clone https://github.com/Descent098/otp```.
+1. Clone this repo: ```git clone https://github.com/Descent098/otp_emoji```.
 2. Run ```pip install .``` or ```sudo pip3 install .```in the root directory
 
 
@@ -62,7 +62,7 @@ decrypt(ciphertext, pad)
 
 ## Additional Documentation
 
-API & Script Documentation: [https://kieranwood.ca/otp](https://kieranwood.ca/otp)
+API & Script Documentation: [https://kieranwood.ca/otp_emoji/](https://kieranwood.ca/otp_emoji/)
 
 
 
@@ -129,7 +129,7 @@ To view the current documentation site you can run ```pdoc otp --http localhost:
 
 Documentation:
 
-[https://kieranwood.ca/otp](https://kieranwood.ca/otp)
+[https://kieranwood.ca/otp_emoji/](https://kieranwood.ca/otp_emoji)
 
 
 
