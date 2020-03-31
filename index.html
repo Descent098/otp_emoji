@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
-<title>otp API documentation</title>
+<meta name="generator" content="pdoc 0.7.5" />
+<title>otp_emoji API documentation</title>
 <meta name="description" content="Used to generate 🙊 one-time pads 🤐 exclusively in emojis …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>otp</code></h1>
+<h1 class="title">Module <code>otp_emoji</code></h1>
 </header>
 <section id="section-intro">
 <p>Used to generate 🙊 one-time pads 🤐 exclusively in emojis.</p>
@@ -25,13 +25,13 @@
 module exposes both an API and entrypoint. API documentation begins after the
 entrypoint usage information.</p>
 <h2 id="script-usage">🖥️Script Usage</h2>
-<p>The usage POSIX string for the otp script:</p>
+<p>The usage POSIX string for the otp_emoji script:</p>
 <pre><code>
 Usage
 -----
-otp [-h] [-v]
-otp encrypt &lt;text&gt; [-s] [-o OUTPUT_PATH] [-p PAD_PATH]
-otp decrypt &lt;ciphertext&gt; &lt;pad&gt; [-s] [-o OUTPUT_PATH]
+otp_emoji [-h] [-v]
+otp_emoji encrypt &lt;text&gt; [-s] [-o OUTPUT_PATH] [-p PAD_PATH]
+otp_emoji decrypt &lt;ciphertext&gt; &lt;pad&gt; [-s] [-o OUTPUT_PATH]
 Options:
 -h, --help            show this help message and exit
 -v, --version         show program's version number and exit
@@ -42,21 +42,25 @@ Options:
                       allows you to specify a pre-created one time pad
 -s, --stream          print result to output stream (stdout)
 </code></pre>
-<p>So for example you could run <code>otp encrypt secret_text.txt</code> which will create
+<p>So for example you could run <code>otp_emoji encrypt secret_text.txt</code> which will create
 a ciphertext and pad of the contents of secret_text.txt and output them to the current
 directory as <code>pad.txt</code> and <code>ciphertext.txt</code> respectively. You could then run
-<code>otp decrypt ciphertext.txt pad.txt</code> which would decrypt the message and send the
+<code>otp_emoji decrypt ciphertext.txt pad.txt</code> which would decrypt the message and send the
 output to the current directory as <code>plaintext.txt</code>.</p>
 <h2 id="variables">📦Variables</h2>
 <p>chipher_chars : (list)
 The list of emojis useable for creating one time pads</p>
 <p>usage : (str)
-The POSIX usage string that drives docopt for the <code>otp</code> script</p>
+The POSIX usage string that drives docopt for the <code>otp_emoji</code> script</p>
 <h2 id="notes">📝Notes</h2>
 <ul>
 <li>
 <p>🚫 DON'T USE THIS IN PRODUCTION 🚫 I created this project to help better
 understand my security course in 🏫.</p>
+</li>
+<li>
+<p>Note that because of the mapping necessary to make the project more secure in case someone
+does actually use this only ASCII characters can be used. </p>
 </li>
 <li>
 <p>No I will not put this on PyPi, again I put minimal effort into this and it's
@@ -71,14 +75,20 @@ as 'UTF-8' otherwise there will be an error when the charmaps are read. i.e. </p
     pad = pad_file.read()
 </code></pre>
 <h2 id="references">👩‍🏫References</h2>
-<p>One Time Pad explanations:
-- <a href="https://searchsecurity.techtarget.com/definition/one-time-pad">https://searchsecurity.techtarget.com/definition/one-time-pad</a>
-- <a href="http://users.telenet.be/d.rijmenants/en/onetimepad.htm">http://users.telenet.be/d.rijmenants/en/onetimepad.htm</a>
-- <a href="https://www.cryptomuseum.com/crypto/otp/index.htm">https://www.cryptomuseum.com/crypto/otp/index.htm</a>
-- <a href="https://medium.com/blockgeeks-blog/cryptography-for-dummies-part-4-the-one-time-pad-7711438c9b8a">https://medium.com/blockgeeks-blog/cryptography-for-dummies-part-4-the-one-time-pad-7711438c9b8a</a></p>
+<p>One Time Pad explanations:</p>
+<pre><code>- &lt;https://searchsecurity.techtarget.com/definition/one-time-pad&gt;
+
+- &lt;http://users.telenet.be/d.rijmenants/en/onetimepad.htm&gt;
+
+- &lt;https://www.cryptomuseum.com/crypto/otp/index.htm&gt;
+
+- &lt;https://medium.com/blockgeeks-blog/cryptography-for-dummies-part-4-the-one-time-pad-7711438c9b8a&gt;
+</code></pre>
+<p>ASCII chart for supported characters:
+- <a href="https://www.commfront.com/pages/ascii-chart">https://www.commfront.com/pages/ascii-chart</a></p>
 <h2 id="examples">🤷Examples</h2>
 <p>Encrypting 'Do not go gentle into that good night' by Dylan Thomas</p>
-<pre><code>from otp import encrypt, decrypt
+<pre><code>from otp_emoji import encrypt, decrypt
 
 text = '''Do not go gentle into that good night,
 Old age should burn and rave at close of day;
@@ -109,6 +119,12 @@ ciphertext, pad = encrypt(text, pad_path='./pad.txt', ciphertext_path='./ciphert
 
 decrypt(ciphertext, pad, text_path='./decrypted_text.txt')
 </code></pre>
+<h2 id="todo">TODO</h2>
+<ul>
+<li>Get emoji map up to 255</li>
+<li>Change generate OTP to use emoji map and secrets hex generation</li>
+<li>Write ciphertext as emoji's</li>
+</ul>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -122,12 +138,12 @@ entrypoint usage information.
 
 🖥️Script Usage
 --------------
-The usage POSIX string for the otp script:
+The usage POSIX string for the otp_emoji script:
 ```
 Usage:
-    otp [-h] [-v]
-    otp encrypt &lt;text&gt; [-s] [-o OUTPUT_PATH] [-p PAD_PATH]
-    otp decrypt &lt;ciphertext&gt; &lt;pad&gt; [-s] [-o OUTPUT_PATH]
+    otp_emoji [-h] [-v]
+    otp_emoji encrypt &lt;text&gt; [-s] [-o OUTPUT_PATH] [-p PAD_PATH]
+    otp_emoji decrypt &lt;ciphertext&gt; &lt;pad&gt; [-s] [-o OUTPUT_PATH]
 
 
 Options:
@@ -141,10 +157,10 @@ Options:
 -s, --stream          print result to output stream (stdout)
 ```
 
-So for example you could run ```otp encrypt secret_text.txt``` which will create
+So for example you could run ```otp_emoji encrypt secret_text.txt``` which will create
 a ciphertext and pad of the contents of secret_text.txt and output them to the current
 directory as ```pad.txt``` and ```ciphertext.txt``` respectively. You could then run
-```otp decrypt ciphertext.txt pad.txt``` which would decrypt the message and send the
+```otp_emoji decrypt ciphertext.txt pad.txt``` which would decrypt the message and send the
 output to the current directory as ```plaintext.txt```.
 
 📦Variables
@@ -153,12 +169,15 @@ chipher_chars : (list)
     The list of emojis useable for creating one time pads
 
 usage : (str)
-    The POSIX usage string that drives docopt for the ``otp`` script
+    The POSIX usage string that drives docopt for the ``otp_emoji`` script
 
 📝Notes
 --------
 - 🚫 DON&#39;T USE THIS IN PRODUCTION 🚫 I created this project to help better
     understand my security course in 🏫.
+
+- Note that because of the mapping necessary to make the project more secure in case someone
+    does actually use this only ASCII characters can be used. 
 
 - No I will not put this on PyPi, again I put minimal effort into this and it&#39;s
     better for it to remain a dissapointment to me than the python community as a whole.
@@ -173,17 +192,24 @@ with open(&#39;pad.txt&#39;, encoding=&#39;utf-8&#39;) as pad_file:
 👩‍🏫References
 -------------
 One Time Pad explanations:
+
     - https://searchsecurity.techtarget.com/definition/one-time-pad
+
     - http://users.telenet.be/d.rijmenants/en/onetimepad.htm
+
     - https://www.cryptomuseum.com/crypto/otp/index.htm
+
     - https://medium.com/blockgeeks-blog/cryptography-for-dummies-part-4-the-one-time-pad-7711438c9b8a
+
+ASCII chart for supported characters:
+    - https://www.commfront.com/pages/ascii-chart
 
 🤷Examples
 -----------
 Encrypting &#39;Do not go gentle into that good night&#39; by Dylan Thomas
 
 ```
-from otp import encrypt, decrypt
+from otp_emoji import encrypt, decrypt
 
 text = &#39;&#39;&#39;Do not go gentle into that good night,
 Old age should burn and rave at close of day;
@@ -214,14 +240,22 @@ ciphertext, pad = encrypt(text, pad_path=&#39;./pad.txt&#39;, ciphertext_path=&#
 
 decrypt(ciphertext, pad, text_path=&#39;./decrypted_text.txt&#39;)
 ```
+
+TODO
+----
+* Get emoji map up to 255
+* Change generate OTP to use emoji map and secrets hex generation
+* Write ciphertext as emoji&#39;s
 &#34;&#34;&#34;
 
 # Standard lib dependencies
 import os                       # Used to validate filepaths
 import sys                      # Used to fix arglengths of 0 for CLI
 import logging                  # Used to log (obviously)
-from random import choice       # Used to choose each emoji per character
+from copy import deepcopy
 from typing import Generator    # Used to typehint generator returns
+from secrets import token_hex   # Used to produce reliably random hex values
+
 
 # External Dependencies
 from docopt import docopt   # Used to handle argument parsing from the entrypoint
@@ -229,9 +263,9 @@ from docopt import docopt   # Used to handle argument parsing from the entrypoin
 usage = &#34;&#34;&#34;Used to generate one-time pads 🤐, by default in emojis.
 
 Usage:
-    otp [-h] [-v]
-    otp encrypt &lt;text&gt; [-s] [-o OUTPUT_PATH] [-p PAD_PATH] 
-    otp decrypt &lt;ciphertext&gt; &lt;pad&gt; [-s] [-o OUTPUT_PATH] 
+    otp_emoji [-h] [-v]
+    otp_emoji encrypt &lt;text&gt; [-s] [-o OUTPUT_PATH] [-p PAD_PATH] 
+    otp_emoji decrypt &lt;ciphertext&gt; &lt;pad&gt; [-s] [-o OUTPUT_PATH] 
 
 
 Options:
@@ -253,8 +287,46 @@ cipher_chars = [
     &#34;🤏&#34;, &#34;🤘&#34;, &#34;🤞&#34;, &#34;🤙&#34;, &#34;🖕&#34;, &#34;👊&#34;, &#34;🤛&#34;, &#34;🙌&#34;, &#34;👏&#34;, &#34;🤳&#34;, &#34;💪&#34;, &#34;👂&#34;, &#34;👁&#34;, &#34;👨‍🦰&#34;, &#34;👨‍🦱&#34;, &#34;🧔&#34;, &#34;👩‍🦳&#34;,
     &#34;👩&#34;, &#34;👩‍🦲&#34;, &#34;👴&#34;, &#34;🙅&#34;, &#34;🙆&#34;, &#34;💁‍♂️&#34;, &#34;🙋‍♀️&#34;, &#34;🧏‍♂️&#34;, &#34;🙇&#34;, &#34;🤦&#34;, &#34;🤦‍♂️&#34;, &#34;🤦‍♀️&#34;, &#34;🤷&#34;, &#34;🤷‍♂️&#34;, &#34;🤷‍♀️&#34;, &#34;👨‍🎓&#34;, &#34;👨‍🏫&#34;,
     &#34;👨‍🌾&#34;, &#34;👨‍🔧&#34;, &#34;👩‍🏭&#34;, &#34;👩‍💼&#34;, &#34;👨‍🔬&#34;, &#34;👩‍💻&#34;, &#34;👨‍🎨&#34;, &#34;👩‍✈️&#34;, &#34;👮&#34;, &#34;🕵&#34;, &#34;💂&#34;, &#34;👷&#34;, &#34;🎅&#34;, &#34;🦸&#34;, &#34;🧙&#34;, &#34;🧚&#34;, &#34;💇&#34;, &#34;👨‍🦯&#34;,
-    &#34;👯&#34;, &#34;🤺&#34;, &#34;🏇&#34;, &#34;🏌&#34;, &#34;⛹&#34;, &#34;🏋&#34;, &#34;🚴&#34;, &#34;🤸&#34;, &#34;🤽&#34;, &#34;🤼&#34;, &#34;🤹&#34;, &#34;🧘&#34;, &#34;🛌&#34;, &#34;👨‍👩‍👦‍👦&#34;, &#34;👨‍👩‍👧‍👧&#34;, &#34;👨‍👨‍👧‍👦&#34;, &#34;👩‍👩‍👧‍👦&#34;, &#34;👩‍👩‍👧‍👧&#34;
+    &#34;👯&#34;, &#34;🤺&#34;, &#34;🏇&#34;, &#34;🏌&#34;, &#34;⛹&#34;, &#34;🏋&#34;, &#34;🚴&#34;, &#34;🤸&#34;, &#34;🤽&#34;, &#34;🤼&#34;, &#34;🤹&#34;, &#34;🧘&#34;, &#34;🛌&#34;, &#34;👨‍👩‍👦‍👦&#34;, &#34;👨‍👩‍👧‍👧&#34;, &#34;👨‍👨‍👧‍👦&#34;, &#34;👩‍👩‍👧‍👦&#34;, &#34;👩‍👩‍👧‍👧&#34;,
+    &#34;🤎&#34;, &#34;🖤&#34;, &#34;💜&#34;, &#34;💙&#34;, &#34;💚&#34;, &#34;💛&#34;, &#34;🧡&#34;, &#34;💯&#34;, &#34;💥&#34;, &#34;💦&#34;, &#34;💣&#34;, &#34;💨&#34;, &#34;💤&#34;, &#34;👋&#34;, &#34;🖐&#34;, &#34;🖖&#34;, &#34;🏄&#34;, &#34;🚣&#34;,
+    &#34;🏊&#34;, &#34;🐿&#34;, &#34;🐹&#34;, &#34;🐀&#34;, &#34;🦇&#34;, &#34;🦥&#34;, &#34;🦦&#34;, &#34;🦨&#34;, &#34;🦘&#34;, &#34;🦃&#34;, &#34;🐔&#34;, &#34;🐥&#34;, &#34;🐧&#34;, &#34;🕊&#34;, &#34;🦅&#34;, &#34;🦆&#34;, &#34;🦢&#34;, &#34;🐌&#34;, 
+    &#34;🦋&#34;, &#34;🐛&#34;, &#34;🐝&#34;, &#34;🐜&#34;, &#34;🦗&#34;, &#34;🐞&#34;, &#34;🕷&#34;, &#34;💮&#34;, &#34;🏵&#34;, &#34;🌷&#34;, &#34;🌱&#34;, &#34;🌿&#34;, &#34;🍂&#34;, &#34;🥑&#34;, &#34;🌶&#34;, &#34;🥙&#34;, &#34;🍳&#34;, &#34;🥘&#34;, &#34;🍿&#34;,
+    &#34;🍺&#34;, &#34;🍻&#34;, &#34;🥃&#34;, &#34;🍽&#34;, &#34;🏔&#34;, &#34;🏛&#34;, &#34;🏗&#34;, &#34;🏰&#34;, &#34;🗽&#34;, &#34;🗼&#34;, &#34;⛩&#34;, &#34;🕋&#34;, &#34;🛕&#34;, &#34;⛲&#34;, &#34;🌁&#34;, &#34;♨&#34;, &#34;🌉&#34;, &#34;🎡&#34;, &#34;🛤&#34;, &#34;⛽&#34;,
+    &#34;⛵&#34;, &#34;🚤&#34;, &#34;✈&#34;, &#34;🚁&#34;, &#34;🛎&#34;, &#34;🧳&#34;, &#34;🌑&#34;, &#34;🌒&#34;, &#34;🌓&#34;, &#34;🌔&#34;, &#34;🌕&#34;, &#34;🌛&#34;, &#34;🌜&#34;, &#34;🪐&#34;, &#34;⭐&#34;, &#34;🌟&#34;, &#34;🌌&#34;, &#34;🌪&#34;, &#34;🌀&#34;, &#34;⛱&#34;,
+    &#34;⚡&#34;, &#34;☃&#34;, &#34;🔥&#34;, &#34;💧&#34;, &#34;🌊&#34;, &#34;🎎&#34;, &#34;🎍&#34;, &#34;🧧&#34;, &#34;🥊&#34;, &#34;🥅&#34;, &#34;🎣&#34;, &#34;🤿&#34;, &#34;🎿&#34;, &#34;🥌&#34;, &#34;🎱&#34;, &#34;🎮&#34;, &#34;🎰&#34;, &#34;🎲&#34;, &#34;♠&#34;, &#34;♟&#34;, 
+    &#34;🎴&#34;, &#34;🧵&#34;, &#34;🥼&#34;, &#34;👔&#34;, &#34;🧥&#34;, &#34;🥾&#34;, &#34;🖨&#34;, &#34;🆘&#34;
+
 ]
+
+emoji_map = {
+        &#34;🤗&#34; : 0,&#34;🙄&#34; : 1,&#34;🤮&#34; : 2,&#34;🤧&#34; : 3,&#34;🥵&#34; : 4,&#34;🙏&#34; : 5,&#34;👅&#34; : 6,&#34;🍒&#34; : 7,&#34;🍆&#34; : 8,&#34;🍇&#34; : 9,&#34;🍌&#34; : 10,
+        &#34;🍋&#34; : 11,&#34;🌵&#34; : 12,&#34;🍑&#34; : 13,&#34;👀&#34; : 14,&#34;👨‍💻&#34; : 15,&#34;👨‍🎤&#34; : 16,&#34;🧛&#34; : 17,&#34;🧜‍♀️&#34; : 18,&#34;🧝‍♂️&#34; : 19,&#34;🧞&#34; : 20,
+        &#34;👨‍🦼&#34; : 21,&#34;🧗&#34; : 22,&#34;⛷&#34; : 23,&#34;🐶&#34; : 24,&#34;🦊&#34; : 25,&#34;🦄&#34; : 26,&#34;🐊&#34; : 27,&#34;🐢&#34; : 28,&#34;🦜&#34; : 29,&#34;🦉&#34; : 30,
+        &#34;🐙&#34; : 31,&#34;🐳&#34; : 32,&#34;🐉&#34; : 33,&#34;🦖&#34; : 34,&#34;🦂&#34; : 35,&#34;🥐&#34; : 36,&#34;🥨&#34; : 37,&#34;🥯&#34; : 38,&#34;🥞&#34; : 39,&#34;🍔&#34; : 40,
+        &#34;🍕&#34; : 41,&#34;🧈&#34; : 42,&#34;🍜&#34; : 43,&#34;🦀&#34; : 44,&#34;🦞&#34; : 45,&#34;🦑&#34; : 46,&#34;🏺&#34; : 47,&#34;🚄&#34; : 48,&#34;🚔&#34; : 49,&#34;🦼&#34; : 50,
+        &#34;🚀&#34; : 51,&#34;🛸&#34; : 52,&#34;🌚&#34; : 53,&#34;❄&#34; : 54,&#34;🌊&#34; : 232,&#34;🥌&#34; : 241,&#34;♟&#34; : 247,&#34;🦺&#34; : 58,&#34;🎩&#34; : 59,&#34;🎷&#34; : 60,
+        &#34;💻&#34; : 61,&#34;💾&#34; : 62,&#34;🤏&#34; : 63,&#34;🤘&#34; : 64,&#34;🤞&#34; : 65,&#34;🤙&#34; : 66,&#34;🖕&#34; : 67,&#34;👊&#34; : 68,&#34;🤛&#34; : 69,&#34;🙌&#34; : 70,
+        &#34;👏&#34; : 71,&#34;🤳&#34; : 72,&#34;💪&#34; : 73,&#34;👂&#34; : 74,&#34;👁&#34; : 75,&#34;👨‍🦰&#34; : 76,&#34;👨‍🦱&#34; : 77,&#34;🧔&#34; : 78,&#34;👩‍🦳&#34; : 79,&#34;👩&#34; : 80,
+        &#34;👩‍🦲&#34; : 81,&#34;👴&#34; : 82,&#34;🙅&#34; : 83,&#34;🙆&#34; : 84,&#34;💁‍♂️&#34; : 85,&#34;🙋‍♀️&#34; : 86,&#34;🧏‍♂️&#34; : 87,&#34;🙇&#34; : 88,&#34;🤦&#34; : 89,&#34;🤦‍♂️&#34; : 90,
+        &#34;🤦‍♀️&#34; : 91,&#34;🤷&#34; : 92,&#34;🤷‍♂️&#34; : 93,&#34;🤷‍♀️&#34; : 94,&#34;👨‍🎓&#34; : 95,&#34;👨‍🏫&#34; : 96,&#34;👨‍🌾&#34; : 97,&#34;👨‍🔧&#34; : 98,&#34;👩‍🏭&#34; : 99,&#34;👩‍💼&#34; : 100,
+        &#34;👨‍🔬&#34; : 101,&#34;👩‍💻&#34; : 102,&#34;👨‍🎨&#34; : 103,&#34;👩‍✈️&#34; : 104,&#34;👮&#34; : 105,&#34;🕵&#34; : 106,&#34;💂&#34; : 107,&#34;👷&#34; : 108,&#34;🎅&#34; : 109,&#34;🦸&#34; : 110,
+        &#34;🧙&#34; : 111,&#34;🧚&#34; : 112,&#34;💇&#34; : 113,&#34;👨‍🦯&#34; : 114,&#34;👯&#34; : 115,&#34;🤺&#34; : 116,&#34;🏇&#34; : 117,&#34;🏌&#34; : 118,&#34;⛹&#34; : 119,&#34;🏋&#34; : 120,
+        &#34;🚴&#34; : 121,&#34;🤸&#34; : 122,&#34;🤽&#34; : 123,&#34;🤼&#34; : 124,&#34;🤹&#34; : 125,&#34;🧘&#34; : 126,&#34;🛌&#34; : 127,&#34;👨‍👩‍👦‍👦&#34; : 128,&#34;👨‍👩‍👧‍👧&#34; : 129,&#34;👨‍👨‍👧‍👦&#34; : 130,
+        &#34;👩‍👩‍👧‍👦&#34; : 131,&#34;👩‍👩‍👧‍👧&#34; : 132,&#34;🤎&#34; : 133,&#34;🖤&#34; : 134,&#34;💜&#34; : 135,&#34;💙&#34; : 136,&#34;💚&#34; : 137,&#34;💛&#34; : 138,&#34;🧡&#34; : 139,&#34;💯&#34; : 140,
+        &#34;💥&#34; : 141,&#34;💦&#34; : 142,&#34;💣&#34; : 143,&#34;💨&#34; : 144,&#34;💤&#34; : 145,&#34;👋&#34; : 146,&#34;🖐&#34; : 147,&#34;🖖&#34; : 148,&#34;🏄&#34; : 149,&#34;🚣&#34; : 150,
+        &#34;🏊&#34; : 151,&#34;🐿&#34; : 152,&#34;🐹&#34; : 153,&#34;🐀&#34; : 154,&#34;🦇&#34; : 155,&#34;🦥&#34; : 156,&#34;🦦&#34; : 157,&#34;🦨&#34; : 158,&#34;🦘&#34; : 159,&#34;🦃&#34; : 160,
+        &#34;🐔&#34; : 161,&#34;🐥&#34; : 162,&#34;🐧&#34; : 163,&#34;🕊&#34; : 164,&#34;🦅&#34; : 165,&#34;🦆&#34; : 166,&#34;🦢&#34; : 167,&#34;🐌&#34; : 168,&#34;🦋&#34; : 169,&#34;🐛&#34; : 170,
+        &#34;🐝&#34; : 171,&#34;🐜&#34; : 172,&#34;🦗&#34; : 173,&#34;🐞&#34; : 174,&#34;🕷&#34; : 175,&#34;💮&#34; : 176,&#34;🏵&#34; : 177,&#34;🌷&#34; : 178,&#34;🌱&#34; : 179,&#34;🌿&#34; : 180,
+        &#34;🍂&#34; : 181,&#34;🥑&#34; : 182,&#34;🌶&#34; : 183,&#34;🥙&#34; : 184,&#34;🍳&#34; : 185,&#34;🥘&#34; : 186,&#34;🍿&#34; : 187,&#34;🍺&#34; : 188,&#34;🍻&#34; : 189,&#34;🥃&#34; : 190,
+        &#34;🍽&#34; : 191,&#34;🏔&#34; : 192,&#34;🏛&#34; : 193,&#34;🏗&#34; : 194,&#34;🏰&#34; : 195,&#34;🗽&#34; : 196,&#34;🗼&#34; : 197,&#34;⛩&#34; : 198,&#34;🕋&#34; : 199,&#34;🛕&#34; : 200,
+        &#34;⛲&#34; : 201,&#34;🌁&#34; : 202,&#34;♨&#34; : 203,&#34;🌉&#34; : 204,&#34;🎡&#34; : 205,&#34;🛤&#34; : 206,&#34;⛽&#34; : 207,&#34;⛵&#34; : 208,&#34;🚤&#34; : 209,&#34;✈&#34; : 210,
+        &#34;🚁&#34; : 211,&#34;🛎&#34; : 212,&#34;🧳&#34; : 213,&#34;🌑&#34; : 214,&#34;🌒&#34; : 215,&#34;🌓&#34; : 216,&#34;🌔&#34; : 217,&#34;🌕&#34; : 218,&#34;🌛&#34; : 219,&#34;🌜&#34; : 220,
+        &#34;🪐&#34; : 221,&#34;⭐&#34; : 222,&#34;🌟&#34; : 223,&#34;🌌&#34; : 224,&#34;🌪&#34; : 225,&#34;🌀&#34; : 226,&#34;⛱&#34; : 227,&#34;⚡&#34; : 228,&#34;☃&#34; : 229,&#34;🔥&#34; : 230,
+        &#34;💧&#34; : 231,&#34;🎎&#34; : 233,&#34;🎍&#34; : 234,&#34;🧧&#34; : 235,&#34;🥊&#34; : 236,&#34;🥅&#34; : 237,&#34;🎣&#34; : 238,&#34;🤿&#34; : 239,&#34;🎿&#34; : 240,&#34;🎱&#34; : 242,
+        &#34;🎮&#34; : 243,&#34;🎰&#34; : 244,&#34;🎲&#34; : 245,&#34;♠&#34; : 246,&#34;🎴&#34; : 248,&#34;🧵&#34; : 249,&#34;🥼&#34; : 250,&#34;👔&#34; : 251,&#34;🧥&#34; : 252,&#34;🥾&#34; : 253,
+        &#34;🖨&#34; : 254,&#34;🆘&#34; : 255
+}
+
 
 def generate_otp(length:int) -&gt; Generator:
     &#34;&#34;&#34;Generates a one time pad of emojis based on input length.
@@ -273,7 +345,7 @@ def generate_otp(length:int) -&gt; Generator:
     --------
     Generating a 10 character otp
     ```
-    from otp import generate_otp
+    from otp_emoji import generate_otp
 
     otp = generate_otp(10)
 
@@ -282,8 +354,8 @@ def generate_otp(length:int) -&gt; Generator:
     ```
     &#34;&#34;&#34;
     for digit in range(length):
-        yield choice(cipher_chars)
-
+        hex_value = int(token_hex(1), 16)
+        yield cipher_chars[hex_value] + &#34;|&#34;
 
 def encrypt(input_text:str, pad:bool=False, pad_path:str = False, ciphertext_path:str = False) -&gt; tuple:
     &#34;&#34;&#34;Encrypts 🔒 text using provided pad, or generates one of the same length.
@@ -315,7 +387,7 @@ def encrypt(input_text:str, pad:bool=False, pad_path:str = False, ciphertext_pat
     Encrypting a 1984 (George Orwell) quote and saving
     the resulting ciphertext and path to files.
     ```
-    from otp import encrypt
+    from otp_emoji import encrypt
 
     text = &#39;Who controls the past controls the future. Who controls the present controls the past.&#39;
 
@@ -330,23 +402,33 @@ def encrypt(input_text:str, pad:bool=False, pad_path:str = False, ciphertext_pat
     logging.debug(f&#34;pad_path={pad_path}&#34;)
     logging.debug(f&#34;ciphertext_path={ciphertext_path}&#34;)
 
+
+    ciphertext = &#34;&#34;
     if not pad:
         pad = &#34;&#34;
-        for character in generate_otp(len(input_text)):
+        for count, character in enumerate(generate_otp(len(input_text))):
+            logging.debug(character)
             pad += character
+            shifted_value = &#34;&#34;
+            character = character[0:-1] # remove | delimiter from pad character
 
-    logging.debug(f&#34;pad={pad}&#34;)
-    ciphertext = &#34;&#34;
-    for character in zip(input_text, pad):
-        
+            logging.debug(f&#34;{input_text[count]} ^ {character}({emoji_map[character]})&#34;)
+            shifted_value += cipher_chars[(ord(input_text[count]) ^ emoji_map[character])]
 
-        logging.debug(f&#34;Character= {character[0]} {character[1]}&#34;)
-        shifted_value = &#34;&#34;
-        
-        logging.debug(f&#34;{ord(character[0])} ^ {ord(character[1])}&#34;)
-        shifted_value +=  str(ord(character[0]) ^ ord(character[1]))
+            ciphertext += (shifted_value) + &#34;|&#34; # Delimit ciphertext by pipes and append
 
-        ciphertext += (shifted_value) + &#34;‎&#34; # Delimit ciphertext by 0em spaces and append
+        logging.debug(f&#34;pad={pad}&#34;)
+    
+    else: # If custom pad is provided
+        pad = deepcopy(pad)
+        pad = pad.split(&#34;|&#34;)
+        for character in zip(input_text, pad):
+            print(f&#34;Character= {character[0]} {character[1]}&#34;)
+            shifted_value = &#34;&#34;
+            logging.debug(f&#34;{input_text[count]} ^ {character}({emoji_map[character]})&#34;)
+            shifted_value += cipher_chars[(ord(input_text[count]) ^ emoji_map[character])]
+
+            ciphertext += (shifted_value) + &#34;|&#34; # Delimit ciphertext by pipes and append
 
     ciphertext = ciphertext[0:-1]
     if pad_path:
@@ -385,7 +467,7 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -&gt; str:
     --------
     Encrypting some text from files found in the encrypt() example.
     ```
-    from otp import decrypt
+    from otp_emoji import decrypt
 
     pad = &#39;&#39;
 
@@ -400,7 +482,8 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -&gt; str:
     print( decrypt(ciphertext, pad) ) # Prints: &#39;Who controls the past controls the future. Who controls the present controls the past.&#39;
     ```
     &#34;&#34;&#34;
-    cipher_text = cipher_text.split(&#34;‎&#34;) # Split ciphertext by 0em spaces
+    cipher_text = cipher_text.split(&#34;|&#34;) # Split ciphertext by pipes
+    pad = pad.split(&#34;|&#34;) # Split pad by pipes
 
     print(&#34;👀 Decrypting text 👀&#34;)
 
@@ -415,7 +498,7 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -&gt; str:
         decrypted_value = &#34;&#34;
         logging.debug(f&#34;{character[0]} ^ {character[1]}&#34;)
 
-        decrypted_value +=  chr(int(character[0]) ^ ord(character[1]))
+        decrypted_value +=  chr(emoji_map[character[0]] ^ emoji_map[character[1]])
         plaintext += decrypted_value
 
     if text_path:
@@ -426,14 +509,12 @@ def decrypt(cipher_text:str, pad:str, text_path:str = False) -&gt; str:
     return plaintext
 
 def main() -&gt; None:
-    &#34;&#34;&#34;otp script entrypoint; handles logic for the otp command&#34;&#34;&#34;
+    &#34;&#34;&#34;otp_emoji script entrypoint; handles logic for the otp_emoji command&#34;&#34;&#34;
     if len(sys.argv) == 1: # If no arguments are provided
         print(usage)       # Print helptext
         exit()             # Exit program
 
-    args = docopt(usage, version=&#34;otp V 1.2.0&#34;)
-
-    print(args)
+    args = docopt(usage, version=&#34;otp_emoji V 1.3.0&#34;)
 
     # ================== Encrypt Argument Parsing ==================
     if args[&#34;encrypt&#34;]:        
@@ -454,25 +535,34 @@ def main() -&gt; None:
     
     # ================== Decrypt Argument Parsing ==================
     if args[&#34;decrypt&#34;]:
-        if args[&#34;--output&#34;]:
-            if not os.path.isdir(args[&#34;--output&#34;]): # If no valid output directory specified
-                args[&#34;--output&#34;] = os.curdir
-        else:
-            args[&#34;--output&#34;] = False
-
         with open(args[&#34;&lt;ciphertext&gt;&#34;], encoding=&#34;utf-8&#34;) as ciphertext_file:
             args[&#34;&lt;ciphertext&gt;&#34;] = ciphertext_file.read()
         
         with open(args[&#34;&lt;pad&gt;&#34;], encoding=&#34;utf-8&#34;) as pad_file:
             args[&#34;&lt;pad&gt;&#34;] = pad_file.read()
+
+        if args[&#34;--output&#34;]:
+            if not os.path.isdir(args[&#34;--output&#34;]): # If no valid output directory specified
+                args[&#34;--output&#34;] = os.curdir
+                print(f&#34;Provided output path was not valid using {os.curdir} instead&#34;)
+            
+            
         
+        else:
+            args[&#34;--output&#34;] = os.curdir
+
         plaintext = decrypt(args[&#34;&lt;ciphertext&gt;&#34;], args[&#34;&lt;pad&gt;&#34;], text_path=f&#34;{args[&#39;--output&#39;]}{os.sep}plaintext.txt&#34;)
+
+        
+        
+        
 
         if args[&#34;--stream&#34;]:
             print(plaintext)
 
 if __name__ == &#34;__main__&#34;:
-    main() # Runs the otp command</code></pre>
+
+    main() # Runs the otp_emoji command</code></pre>
 </details>
 </section>
 <section>
@@ -482,7 +572,7 @@ if __name__ == &#34;__main__&#34;:
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="otp.decrypt"><code class="name flex">
+<dt id="otp_emoji.decrypt"><code class="name flex">
 <span>def <span class="ident">decrypt</span></span>(<span>cipher_text, pad, text_path=False)</span>
 </code></dt>
 <dd>
@@ -502,7 +592,7 @@ text is written to.</p>
 </dl>
 <h2 id="examples">Examples</h2>
 <p>Encrypting some text from files found in the encrypt() example.</p>
-<pre><code>from otp import decrypt
+<pre><code>from otp_emoji import decrypt
 
 pad = ''
 
@@ -544,7 +634,7 @@ print( decrypt(ciphertext, pad) ) # Prints: 'Who controls the past controls the 
     --------
     Encrypting some text from files found in the encrypt() example.
     ```
-    from otp import decrypt
+    from otp_emoji import decrypt
 
     pad = &#39;&#39;
 
@@ -559,7 +649,8 @@ print( decrypt(ciphertext, pad) ) # Prints: 'Who controls the past controls the 
     print( decrypt(ciphertext, pad) ) # Prints: &#39;Who controls the past controls the future. Who controls the present controls the past.&#39;
     ```
     &#34;&#34;&#34;
-    cipher_text = cipher_text.split(&#34;‎&#34;) # Split ciphertext by 0em spaces
+    cipher_text = cipher_text.split(&#34;|&#34;) # Split ciphertext by pipes
+    pad = pad.split(&#34;|&#34;) # Split pad by pipes
 
     print(&#34;👀 Decrypting text 👀&#34;)
 
@@ -574,7 +665,7 @@ print( decrypt(ciphertext, pad) ) # Prints: 'Who controls the past controls the 
         decrypted_value = &#34;&#34;
         logging.debug(f&#34;{character[0]} ^ {character[1]}&#34;)
 
-        decrypted_value +=  chr(int(character[0]) ^ ord(character[1]))
+        decrypted_value +=  chr(emoji_map[character[0]] ^ emoji_map[character[1]])
         plaintext += decrypted_value
 
     if text_path:
@@ -585,7 +676,7 @@ print( decrypt(ciphertext, pad) ) # Prints: 'Who controls the past controls the 
     return plaintext</code></pre>
 </details>
 </dd>
-<dt id="otp.encrypt"><code class="name flex">
+<dt id="otp_emoji.encrypt"><code class="name flex">
 <span>def <span class="ident">encrypt</span></span>(<span>input_text, pad=False, pad_path=False, ciphertext_path=False)</span>
 </code></dt>
 <dd>
@@ -610,7 +701,7 @@ is written to.</p>
 <h2 id="examples">Examples</h2>
 <p>Encrypting a 1984 (George Orwell) quote and saving
 the resulting ciphertext and path to files.</p>
-<pre><code>from otp import encrypt
+<pre><code>from otp_emoji import encrypt
 
 text = 'Who controls the past controls the future. Who controls the present controls the past.'
 
@@ -651,7 +742,7 @@ ciphertext, pad = encrypt(text, pad_path='./pad.txt', ciphertext_path='./ciphert
     Encrypting a 1984 (George Orwell) quote and saving
     the resulting ciphertext and path to files.
     ```
-    from otp import encrypt
+    from otp_emoji import encrypt
 
     text = &#39;Who controls the past controls the future. Who controls the present controls the past.&#39;
 
@@ -666,23 +757,33 @@ ciphertext, pad = encrypt(text, pad_path='./pad.txt', ciphertext_path='./ciphert
     logging.debug(f&#34;pad_path={pad_path}&#34;)
     logging.debug(f&#34;ciphertext_path={ciphertext_path}&#34;)
 
+
+    ciphertext = &#34;&#34;
     if not pad:
         pad = &#34;&#34;
-        for character in generate_otp(len(input_text)):
+        for count, character in enumerate(generate_otp(len(input_text))):
+            logging.debug(character)
             pad += character
+            shifted_value = &#34;&#34;
+            character = character[0:-1] # remove | delimiter from pad character
 
-    logging.debug(f&#34;pad={pad}&#34;)
-    ciphertext = &#34;&#34;
-    for character in zip(input_text, pad):
-        
+            logging.debug(f&#34;{input_text[count]} ^ {character}({emoji_map[character]})&#34;)
+            shifted_value += cipher_chars[(ord(input_text[count]) ^ emoji_map[character])]
 
-        logging.debug(f&#34;Character= {character[0]} {character[1]}&#34;)
-        shifted_value = &#34;&#34;
-        
-        logging.debug(f&#34;{ord(character[0])} ^ {ord(character[1])}&#34;)
-        shifted_value +=  str(ord(character[0]) ^ ord(character[1]))
+            ciphertext += (shifted_value) + &#34;|&#34; # Delimit ciphertext by pipes and append
 
-        ciphertext += (shifted_value) + &#34;‎&#34; # Delimit ciphertext by 0em spaces and append
+        logging.debug(f&#34;pad={pad}&#34;)
+    
+    else: # If custom pad is provided
+        pad = deepcopy(pad)
+        pad = pad.split(&#34;|&#34;)
+        for character in zip(input_text, pad):
+            print(f&#34;Character= {character[0]} {character[1]}&#34;)
+            shifted_value = &#34;&#34;
+            logging.debug(f&#34;{input_text[count]} ^ {character}({emoji_map[character]})&#34;)
+            shifted_value += cipher_chars[(ord(input_text[count]) ^ emoji_map[character])]
+
+            ciphertext += (shifted_value) + &#34;|&#34; # Delimit ciphertext by pipes and append
 
     ciphertext = ciphertext[0:-1]
     if pad_path:
@@ -698,7 +799,7 @@ ciphertext, pad = encrypt(text, pad_path='./pad.txt', ciphertext_path='./ciphert
     return ciphertext, pad</code></pre>
 </details>
 </dd>
-<dt id="otp.generate_otp"><code class="name flex">
+<dt id="otp_emoji.generate_otp"><code class="name flex">
 <span>def <span class="ident">generate_otp</span></span>(<span>length)</span>
 </code></dt>
 <dd>
@@ -713,7 +814,7 @@ The amount of random emoji's to generate.</p>
 </dl>
 <h2 id="examples">Examples</h2>
 <p>Generating a 10 character otp</p>
-<pre><code>from otp import generate_otp
+<pre><code>from otp_emoji import generate_otp
 
 otp = generate_otp(10)
 
@@ -741,7 +842,7 @@ for character in otp:   # Iterate through resulting generator
     --------
     Generating a 10 character otp
     ```
-    from otp import generate_otp
+    from otp_emoji import generate_otp
 
     otp = generate_otp(10)
 
@@ -750,27 +851,26 @@ for character in otp:   # Iterate through resulting generator
     ```
     &#34;&#34;&#34;
     for digit in range(length):
-        yield choice(cipher_chars)</code></pre>
+        hex_value = int(token_hex(1), 16)
+        yield cipher_chars[hex_value] + &#34;|&#34;</code></pre>
 </details>
 </dd>
-<dt id="otp.main"><code class="name flex">
+<dt id="otp_emoji.main"><code class="name flex">
 <span>def <span class="ident">main</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>otp script entrypoint; handles logic for the otp command</p></section>
+<section class="desc"><p>otp_emoji script entrypoint; handles logic for the otp_emoji command</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def main() -&gt; None:
-    &#34;&#34;&#34;otp script entrypoint; handles logic for the otp command&#34;&#34;&#34;
+    &#34;&#34;&#34;otp_emoji script entrypoint; handles logic for the otp_emoji command&#34;&#34;&#34;
     if len(sys.argv) == 1: # If no arguments are provided
         print(usage)       # Print helptext
         exit()             # Exit program
 
-    args = docopt(usage, version=&#34;otp V 1.2.0&#34;)
-
-    print(args)
+    args = docopt(usage, version=&#34;otp_emoji V 1.3.0&#34;)
 
     # ================== Encrypt Argument Parsing ==================
     if args[&#34;encrypt&#34;]:        
@@ -791,19 +891,27 @@ for character in otp:   # Iterate through resulting generator
     
     # ================== Decrypt Argument Parsing ==================
     if args[&#34;decrypt&#34;]:
-        if args[&#34;--output&#34;]:
-            if not os.path.isdir(args[&#34;--output&#34;]): # If no valid output directory specified
-                args[&#34;--output&#34;] = os.curdir
-        else:
-            args[&#34;--output&#34;] = False
-
         with open(args[&#34;&lt;ciphertext&gt;&#34;], encoding=&#34;utf-8&#34;) as ciphertext_file:
             args[&#34;&lt;ciphertext&gt;&#34;] = ciphertext_file.read()
         
         with open(args[&#34;&lt;pad&gt;&#34;], encoding=&#34;utf-8&#34;) as pad_file:
             args[&#34;&lt;pad&gt;&#34;] = pad_file.read()
+
+        if args[&#34;--output&#34;]:
+            if not os.path.isdir(args[&#34;--output&#34;]): # If no valid output directory specified
+                args[&#34;--output&#34;] = os.curdir
+                print(f&#34;Provided output path was not valid using {os.curdir} instead&#34;)
+            
+            
         
+        else:
+            args[&#34;--output&#34;] = os.curdir
+
         plaintext = decrypt(args[&#34;&lt;ciphertext&gt;&#34;], args[&#34;&lt;pad&gt;&#34;], text_path=f&#34;{args[&#39;--output&#39;]}{os.sep}plaintext.txt&#34;)
+
+        
+        
+        
 
         if args[&#34;--stream&#34;]:
             print(plaintext)</code></pre>
@@ -823,22 +931,23 @@ for character in otp:   # Iterate through resulting generator
 <li><a href="#notes">📝Notes</a></li>
 <li><a href="#references">👩‍🏫References</a></li>
 <li><a href="#examples">🤷Examples</a></li>
+<li><a href="#todo">TODO</a></li>
 </ul>
 </div>
 <ul id="index">
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="otp.decrypt" href="#otp.decrypt">decrypt</a></code></li>
-<li><code><a title="otp.encrypt" href="#otp.encrypt">encrypt</a></code></li>
-<li><code><a title="otp.generate_otp" href="#otp.generate_otp">generate_otp</a></code></li>
-<li><code><a title="otp.main" href="#otp.main">main</a></code></li>
+<li><code><a title="otp_emoji.decrypt" href="#otp_emoji.decrypt">decrypt</a></code></li>
+<li><code><a title="otp_emoji.encrypt" href="#otp_emoji.encrypt">encrypt</a></code></li>
+<li><code><a title="otp_emoji.generate_otp" href="#otp_emoji.generate_otp">generate_otp</a></code></li>
+<li><code><a title="otp_emoji.main" href="#otp_emoji.main">main</a></code></li>
 </ul>
 </li>
 </ul>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
